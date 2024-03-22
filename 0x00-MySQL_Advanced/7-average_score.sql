@@ -4,7 +4,7 @@ DELIMITER $$
 CREATE PROCEDURE ComputeAverageScoreForUser (IN user_id INT)
 BEGIN
 	DECLARE aver_score INT;
-	SELECT AVG(score) INTO aver_score FROM corrections WHERE user_id = user_id;
+	SELECT AVG(score) INTO aver_score FROM corrections AS C WHERE C.user_id IN (user_id);
 	UPDATE users SET average_score = aver_score WHERE id = user_id;
 END $$
 DELIMITER ;
