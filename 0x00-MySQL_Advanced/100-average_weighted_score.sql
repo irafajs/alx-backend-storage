@@ -1,7 +1,7 @@
 -- STORED PROCEDURE NAMED ComputeAverageWeightedScoreForUser
 -- COMPUTES AND STORE THE AVERAGE SCORE OF A USER
 DELIMITER $$
-CREATE PROCEDURE ComputeAverageWeightedScoreForUser(IN user_id INT)
+CREATE PROCEDURE ComputeAverageWeightedScoreForUser()
 BEGIN
 	DECLARE avr_score DECIMAL(10, 2);
 	DECLARE sum_weighted_score INT;
