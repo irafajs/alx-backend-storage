@@ -3,7 +3,7 @@
 DELIMITER $$
 CREATE PROCEDURE ComputeAverageWeightedScoreForUser(IN user_id INT)
 BEGIN
-	DECLARE avr_score DECIMAL(10, 2);
+	DECLARE avr_score DECIMAL(10, 3);
 	DECLARE sum_weighted_score INT;
 	DECLARE sum_weight INT;
 	SELECT SUM((C.score * P.weight)) INTO sum_weighted_score 
