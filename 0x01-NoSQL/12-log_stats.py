@@ -9,7 +9,7 @@ from pymongo import MongoClient
 
 def log_stats():
     """Methods to count the logs and the method init"""
-    client = MongoClient()
+    client = MongoClient('mongodb://localhost:27017')
     db = client.logs
     collection = db.nginx
     total_logs = collection.count_documents({})
