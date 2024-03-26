@@ -1,0 +1,2 @@
+// delete documents that matches the passed value name
+db.school.deleteMany({"name": "Holberton school"})
