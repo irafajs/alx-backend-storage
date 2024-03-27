@@ -49,7 +49,8 @@ def replay(func: Callable):
     for input_data, output_data in zip(inputs, outputs):
         input_args = json.loads(input_data.decode())
         output_result = json.loads(output_data.decode())
-        print("{}{} -> {}".format(func.__qualname__, input_args, output_result))
+        print("{}{} -> {}".format(
+            func.__qualname__, input_args, output_result))
 
 
 class Cache:
