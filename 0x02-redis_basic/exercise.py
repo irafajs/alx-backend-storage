@@ -3,6 +3,7 @@
 Shebang to create a PY script
 """
 
+import json
 import redis
 import uuid
 from typing import Union, Callable
@@ -20,6 +21,24 @@ def count_calls(method: Callable) -> Callable:
     return wrapper
 
 
+def call_history(method: Callable) -> Callable:
+    """Method to add data on right, left of the list"""
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        """Wrapper method"""
+        input_key = "{}:inputs".format(method.__qualname__)
+        output_key = "{}:outputs".format(method.__qualname__)
+
+        self._redis.rpush(input_key, str(args))
+
+        result = method(self, *args, **kwargs)
+
+        self._redis.rpush(output_key, result)
+
+        return result
+    return wrapper
+
+
 class Cache:
     """class cache to store the cache of the redis DB"""
     def __init__(self):
@@ -27,6 +46,7 @@ class Cache:
         self._redis = redis.Redis(host='localhost', port=6379)
         self._redis.flushdb()
 
+    @call_history
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """method store that take one argumet"""
