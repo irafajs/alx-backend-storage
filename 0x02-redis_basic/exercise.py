@@ -5,7 +5,9 @@ Shebang to create a PY script
 
 import redis
 import uuid
-from typing import Union
+from typing import Union, Callable
+
+
 class Cache:
     """class cache to store the cache of the redis DB"""
     def __init__(self):
@@ -18,3 +20,21 @@ class Cache:
         keys = str(uuid.uuid4())
         self._redis.set(keys, data)
         return keys
+
+    def get(self, key: str, fn: Callable = None) -> Union[
+            str, bytes, int, float]:
+        """method change data into desirable format"""
+        data = self._redis.get(key)
+        if data is None:
+            return None
+        if fn:
+            return fn(data)
+        return data
+
+    def get_str(self, key: str) -> Union[str, None]:
+        """method paramaterize cache with right conversion"""
+        return self.get(key, fn=lambda d: d.decode("utf-8"))
+
+    def get_int(self, key: str) -> Union[int, None]:
+        """method paramaterize cache with right conversion"""
+        return self.get(key, fn=int)
