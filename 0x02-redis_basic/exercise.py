@@ -6,6 +6,18 @@ Shebang to create a PY script
 import redis
 import uuid
 from typing import Union, Callable
+from functools import wraps
+
+
+def count_calls(method: Callable) -> Callable:
+    """Method to increment when cache class is called"""
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        """method wrapper"""
+        key = method.__qualname__
+        self._redis.incr(key)
+        return method(self, *args, **kwargs)
+    return wrapper
 
 
 class Cache:
@@ -15,6 +27,7 @@ class Cache:
         self._redis = redis.Redis(host='localhost', port=6379)
         self._redis.flushdb()
 
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """method store that take one argumet"""
         keys = str(uuid.uuid4())
